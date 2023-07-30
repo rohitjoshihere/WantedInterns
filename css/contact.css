@@ -1,0 +1,27 @@
+.home-articles h1 {
+    text-align: center;
+    padding: 30px;
+}
+
+.home-articles {
+    font-family: var(--font1);
+    padding: 0px 10px 0px 10px;
+}
+
+
+.contact-content {
+    /* text-align: center; */
+
+}
+
+.contact-form {
+    padding: 10px 0;
+    font-family: var(--font1);
+}
+
+.form-box input,
+textarea {
+    padding: 9px;
+    width: 83vw;
+    /* margin: 5px; */
+}
