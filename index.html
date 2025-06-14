@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Guess the Number Game</title>
+  <title>Click the Circle Game</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- Google Tag Manager -->
@@ -17,47 +17,53 @@
 
   <style>
     body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background: linear-gradient(135deg, #89f7fe, #66a6ff);
-      color: #333;
       margin: 0;
-      padding: 50px 20px;
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      overflow: hidden;
+      text-align: center;
     }
 
-    .container {
-      max-width: 400px;
-      margin: auto;
+    h1 {
+      margin-top: 20px;
+    }
+
+    #gameArea {
+      position: relative;
+      width: 100vw;
+      height: 80vh;
+      border: 2px solid #333;
+      margin: 20px auto;
       background: white;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      overflow: hidden;
     }
 
-    input[type="number"] {
-      padding: 10px;
-      width: 100px;
-      margin-right: 10px;
+    .circle {
+      width: 50px;
+      height: 50px;
+      background: red;
+      border-radius: 50%;
+      position: absolute;
+      cursor: pointer;
+    }
+
+    #scoreBoard {
+      font-size: 20px;
+      margin: 10px 0;
+    }
+
+    #startBtn {
+      padding: 10px 20px;
       font-size: 16px;
-    }
-
-    button {
-      padding: 10px 15px;
       background: #007BFF;
       color: white;
       border: none;
       border-radius: 5px;
-      font-size: 16px;
       cursor: pointer;
     }
 
-    button:hover {
-      background: #0056b3;
-    }
-
-    #message {
-      margin-top: 20px;
-      font-size: 18px;
+    #startBtn:hover {
+      background-color: #0056b3;
     }
   </style>
 </head>
@@ -68,28 +74,61 @@
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
 
-  <div class="container">
-    <h1>Guess the Number!</h1>
-    <p>I'm thinking of a number between 1 and 10</p>
-    <input type="number" id="guess" min="1" max="10">
-    <button onclick="checkGuess()">Guess</button>
-    <p id="message"></p>
-  </div>
+  <h1>Click the Circle!</h1>
+  <div id="scoreBoard">Score: 0 | Time Left: 10s</div>
+  <button id="startBtn" onclick="startGame()">Start Game</button>
+  <div id="gameArea"></div>
 
   <script>
-    const secretNumber = Math.floor(Math.random() * 10) + 1;
+    const gameArea = document.getElementById("gameArea");
+    const scoreBoard = document.getElementById("scoreBoard");
+    let score = 0;
+    let timeLeft = 10;
+    let timer;
+    let gameInterval;
 
-    function checkGuess() {
-      const userGuess = Number(document.getElementById('guess').value);
-      const message = document.getElementById('message');
+    function startGame() {
+      score = 0;
+      timeLeft = 10;
+      scoreBoard.textContent = `Score: ${score} | Time Left: ${timeLeft}s`;
+      document.getElementById("startBtn").disabled = true;
 
-      if (userGuess === secretNumber) {
-        message.textContent = '🎉 Correct! You guessed the number!';
-        message.style.color = 'green';
-      } else {
-        message.textContent = '❌ Try again!';
-        message.style.color = 'red';
-      }
+      timer = setInterval(() => {
+        timeLeft--;
+        scoreBoard.textContent = `Score: ${score} | Time Left: ${timeLeft}s`;
+        if (timeLeft === 0) {
+          clearInterval(timer);
+          clearInterval(gameInterval);
+          document.getElementById("startBtn").disabled = false;
+          alert("Time's up! Your final score is: " + score);
+        }
+      }, 1000);
+
+      spawnCircle();
+      gameInterval = setInterval(spawnCircle, 800);
+    }
+
+    function spawnCircle() {
+      const circle = document.createElement("div");
+      circle.className = "circle";
+
+      const x = Math.random() * (gameArea.clientWidth - 50);
+      const y = Math.random() * (gameArea.clientHeight - 50);
+
+      circle.style.left = `${x}px`;
+      circle.style.top = `${y}px`;
+
+      circle.onclick = () => {
+        score++;
+        scoreBoard.textContent = `Score: ${score} | Time Left: ${timeLeft}s`;
+        gameArea.removeChild(circle);
+      };
+
+      gameArea.appendChild(circle);
+
+      setTimeout(() => {
+        if (gameArea.contains(circle)) gameArea.removeChild(circle);
+      }, 800);
     }
   </script>
 </body>
