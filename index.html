@@ -1,10 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Click the Circle Game</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <!-- Google Tag Manager -->
   <script>
     (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -14,30 +10,22 @@
     })(window,document,'script','dataLayer','GTM-W9BWJLVS');
   </script>
   <!-- End Google Tag Manager -->
-
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: sans-serif;
       background: #f2f2f2;
-      overflow: hidden;
       text-align: center;
+      overflow: hidden;
     }
-
-    h1 {
-      margin-top: 20px;
-    }
-
     #gameArea {
-      position: relative;
       width: 100vw;
       height: 80vh;
-      border: 2px solid #333;
-      margin: 20px auto;
       background: white;
-      overflow: hidden;
+      position: relative;
+      margin: 20px auto;
+      border: 2px solid #000;
     }
-
     .circle {
       width: 50px;
       height: 50px;
@@ -46,12 +34,10 @@
       position: absolute;
       cursor: pointer;
     }
-
     #scoreBoard {
       font-size: 20px;
-      margin: 10px 0;
+      margin-top: 10px;
     }
-
     #startBtn {
       padding: 10px 20px;
       font-size: 16px;
@@ -60,10 +46,6 @@
       border: none;
       border-radius: 5px;
       cursor: pointer;
-    }
-
-    #startBtn:hover {
-      background-color: #0056b3;
     }
   </style>
 </head>
@@ -74,7 +56,7 @@
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
 
-  <h1>Click the Circle!</h1>
+  <h1>Click the Circle</h1>
   <div id="scoreBoard">Score: 0 | Time Left: 10s</div>
   <button id="startBtn" onclick="startGame()">Start Game</button>
   <div id="gameArea"></div>
@@ -100,7 +82,7 @@
           clearInterval(timer);
           clearInterval(gameInterval);
           document.getElementById("startBtn").disabled = false;
-          alert("Time's up! Your final score is: " + score);
+          alert("Time's up! Final score: " + score);
         }
       }, 1000);
 
@@ -111,21 +93,16 @@
     function spawnCircle() {
       const circle = document.createElement("div");
       circle.className = "circle";
-
       const x = Math.random() * (gameArea.clientWidth - 50);
       const y = Math.random() * (gameArea.clientHeight - 50);
-
       circle.style.left = `${x}px`;
       circle.style.top = `${y}px`;
-
       circle.onclick = () => {
         score++;
         scoreBoard.textContent = `Score: ${score} | Time Left: ${timeLeft}s`;
         gameArea.removeChild(circle);
       };
-
       gameArea.appendChild(circle);
-
       setTimeout(() => {
         if (gameArea.contains(circle)) gameArea.removeChild(circle);
       }, 800);
